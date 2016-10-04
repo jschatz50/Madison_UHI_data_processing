@@ -4,7 +4,10 @@
 #################################
 #################################
 ## this combines new data with existing data files e.g. if you have data for the first half of 2015, 
-## this will add the second half of 2015.  so for each data type (TempC, RH, DP), open the previously ## existing file, the new data, and merge
+## this will add the second half of 2015.  so for each data type (TempC, RH, DP), open the previously 
+## existing file, the new data, and merge
+
+install.packages(c("foreach","doMC")
 
 ### open packages ###
 library(plyr)
@@ -13,6 +16,8 @@ library(data.table)
 library(tidyverse)
 library(RAtmosphere)
 library(reshape2)
+library(foreach)
+library(doMC)
 
 all_colnames2 = read.csv("!!column_names2.csv",header=T)
 
@@ -30,7 +35,8 @@ list2=list(TC,RH,DP)
 
 names1 = c("TempC","RH","DP")
 
-for (i in 1:length(list1)){
+registerDoMC(3)	#for parallelizing; specify number of cores
+foreach(i=1:length(list1)) %dopar% {
 	d1 = data.frame(list1[[i]])
 	d2 = data.frame(list2[[i]])
 	d1[,9:ncol(d1)] = apply(d1[,9:ncol(d1)], 2, function(x) as.numeric(x))
