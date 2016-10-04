@@ -1,3 +1,9 @@
+# This script merges downloaded files together, then converts them into the proper format.
+# The important preparatory steps are: (1) Label all CSVs correctly (consistent with 
+# previous labeling, e.g. S.001.R).  (2) Place all CSVs into the same folder.  Make 
+# sure that no other files are in the folder.  Note the path name of the folder.
+
+
 ### install packages (only need to do this once) ###
 install.packages(c("plyr","stringr","data.table","tidyverse","RAtmosphere","reshape2"))
 
@@ -100,14 +106,25 @@ final = rbind.fill(all_colnames,data)
 write.csv(final,paste(season,"DP.csv",sep="_"),row.names=F)
 
 
-
-
-
 #################################
 #################################
 ###    2. Date/time setup     ###
 #################################
 #################################
+# This section calculates sunset/sunrise for each day, then converts the raw time-of-day
+# to time relative to sunrise/sunset, which is useful for daytime/nighttime analyses and 
+# diurnal patterns.  Most columns are self explanatory, but for those that are not:
+# **Time1** is the original time in HMM.  
+# **Time2 is the numbers of hours to the nearest sunset or sunrise, whichever is closer. 
+# Negative numbers indicate nighttime; positive indicate daytime.  For example, -6 means 
+# that it is nighttime, six hours from sunset or sunrise, whichever is closer.  +6 means 
+# the same, but for daytime.  
+# **Time3 is the elapsed time since sunset or sunrise.  Negative numbers indicate nighttime; 
+# positive numbers indicate daytime.  For example, -6 means that it has been six hours since 
+# sunset, and that sunrise has not yet arrived.  +6 means that it has been six hours from 
+# sunrise, and that sunset has not yet arrived.  This is also useful for describing daytime 
+# vs nighttime dynamics.
+	
 T.C = read_csv(paste(season,"TempC.csv",sep="_"))
 RH  = read_csv(paste(season,"RH.csv",sep="_"))
 DP  = read_csv(paste(season,"DP.csv",sep="_"))
