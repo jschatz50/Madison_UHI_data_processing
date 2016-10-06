@@ -9,3 +9,5 @@ The sensors are swapped between locations after each download, which speeds the 
 These scripts process the data from the annual spring and fall downloads.  The scripts should be run in order.  They will merge all individual files together, merge with past years, and perform various meteorological conversions (e.g. Celsius to F, VPD, GDDs, HDDs, daily means, etc.).
 
 The serial number script allows serial numbers to be extracted from files to track the location of individual sensors, which allows us to test for defective or poorly calibrated sensors.  To use this script, you must export the .hobo files with the serial number option selected.
+
+Processed data can be downloaded at: http://dx.doi.org/10.6073/pasta/d07012523ce8681815fb175863b86f0b 
